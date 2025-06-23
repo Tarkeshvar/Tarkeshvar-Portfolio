@@ -26,7 +26,7 @@ const Navigation = () => {
     { href: "#skills", label: "Skills" },
     { href: "#education", label: "Education" },
     { href: "#projects", label: "Projects" },
-    // { href: "#achievements", label: "Achievements" },
+    { href: "#achievements", label: "Achievements" },
     { href: "#contact", label: "Contact" },
   ];
 
@@ -70,11 +70,6 @@ const Navigation = () => {
             >
               {isDark ? <Sun size={20} /> : <Moon size={20} />}
             </button>
-
-            <button className="bg-black text-white hover:bg-neutral-900 px-6 py-2 rounded-lg font-medium transition duration-300 hover:scale-105 shadow-lg flex items-center space-x-2">
-              <Download size={16} />
-              <span>Resume</span>
-            </button>
           </div>
 
           <div className="md:hidden flex items-center space-x-2">
@@ -105,10 +100,6 @@ const Navigation = () => {
                   {item.label}
                 </button>
               ))}
-              <button className="w-full bg-black text-white hover:bg-neutral-900 px-4 py-2 rounded-lg font-medium transition duration-300 hover:scale-105 shadow-lg flex items-center justify-center space-x-2">
-                <Download size={16} />
-                <span>Resume</span>
-              </button>
             </div>
           </div>
         )}

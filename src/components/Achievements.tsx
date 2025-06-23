@@ -1,56 +1,27 @@
 import React from "react";
-import { Trophy, Award, Star, Target, Users, Code2 } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Achievements = () => {
   const achievements = [
     {
-      icon: <Trophy className="w-8 h-8" />,
-      title: "SIH 2024 Winner",
+      title: "University Topper",
+      description: "Achieved 1st rank in 1st year of university.",
+      year: "2023-2024",
+      category: "Academic",
+    },
+    {
+      title: "Bytegram Runner Up (UIC)",
       description:
-        "Won the Smart India Hackathon 2024 with an innovative solution for digital governance.",
-      year: "2024",
+        "Secured runner up position in Bytegram competition organized by UIC.",
+      year: "2023",
       category: "Competition",
     },
     {
-      icon: <Award className="w-8 h-8" />,
-      title: "Best Developer Award",
+      title: "4th Rank in HackBlitz",
       description:
-        "Recognized as the best developer in the annual tech competition.",
-      year: "2023",
-      category: "Recognition",
-    },
-    {
-      icon: <Star className="w-8 h-8" />,
-      title: "50+ Projects Completed",
-      description:
-        "Successfully delivered over 50 web and mobile applications.",
-      year: "2024",
-      category: "Milestone",
-    },
-    {
-      icon: <Target className="w-8 h-8" />,
-      title: "Open Source Contributor",
-      description:
-        "Active contributor to major open source projects with 1000+ contributions.",
-      year: "2023–24",
-      category: "Community",
-    },
-    {
-      icon: <Users className="w-8 h-8" />,
-      title: "Tech Lead",
-      description:
-        "Led a team of 10+ developers in building enterprise-level applications.",
-      year: "2023",
-      category: "Leadership",
-    },
-    {
-      icon: <Code2 className="w-8 h-8" />,
-      title: "Full Stack Certification",
-      description:
-        "Certified in modern full-stack development technologies and practices.",
-      year: "2022",
-      category: "Certification",
+        "Achieved 4th position in HackBlitz hackathon organized by Google Developer Groups.",
+      year: "2025",
+      category: "Hackathon",
     },
   ];
 
@@ -73,7 +44,7 @@ const Achievements = () => {
   };
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gradient-to-br dark:from-[#0c0c0c] dark:via-[#1b181e] dark:to-[#0a0a0a] transition-colors duration-300">
+    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#fefefe] via-[#f9f9f7] to-[#f2f2f2] dark:bg-gradient-to-br dark:from-[#0a0a0a] dark:via-[#1b181e] dark:to-[#0c0c0c] transition-colors duration-300">
       <div className="max-w-7xl mx-auto">
         <motion.div
           className="text-center mb-16"
@@ -82,15 +53,15 @@ const Achievements = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             My{" "}
-            <span className="bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-black to-purple-500 dark:from-white dark:to-purple-400 bg-clip-text text-transparent">
               Achievements
             </span>
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            Milestones and recognition that showcase my journey in technology
-            and development.
+            Milestones and recognition that showcase my academic and competitive
+            journey.
           </p>
         </motion.div>
 
@@ -101,33 +72,26 @@ const Achievements = () => {
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {achievements.map((achievement, index) => (
+          {achievements.map((achievement) => (
             <motion.div
               key={achievement.title}
               className="p-6 sm:p-7 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/30 backdrop-blur-md shadow-md hover:shadow-lg transition-all group"
               variants={cardVariants}
               whileHover={{ scale: 1.03, y: -5 }}
             >
-              <div className="flex items-start justify-between mb-4">
-                <motion.div
-                  className="p-3 bg-gradient-to-br from-yellow-300/20 to-orange-400/20 text-yellow-500 rounded-lg border border-yellow-400/20 group-hover:rotate-12 transition duration-300"
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  {achievement.icon}
-                </motion.div>
-                <div className="text-right">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-1 group-hover:text-purple-500 transition-colors duration-300">
+                    {achievement.title}
+                  </h3>
                   <span className="text-xs bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded-full text-gray-600 dark:text-gray-300 font-medium">
                     {achievement.category}
                   </span>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    {achievement.year}
-                  </p>
                 </div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {achievement.year}
+                </p>
               </div>
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2 group-hover:text-yellow-500 transition-colors duration-300">
-                {achievement.title}
-              </h3>
               <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm">
                 {achievement.description}
               </p>

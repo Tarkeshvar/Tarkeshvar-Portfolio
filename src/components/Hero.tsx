@@ -57,7 +57,7 @@ const Hero = () => {
             custom={0}
           >
             <div className="relative">
-              <div className="p-1 rounded-full bg-gradient-to-r from-gray-400 to-purple-200 dark:from-purple-200 dark:to-purple-300">
+              <div className="p-0.5 rounded-full bg-gradient-to-r from-gray-400 to-purple-200 dark:from-purple-200 dark:to-purple-300">
                 <div className="w-40 h-40 sm:w-52 sm:h-52 lg:w-80 lg:h-80 rounded-full overflow-hidden bg-white dark:bg-[#1b181e] shadow-xl">
                   <img
                     src="/Infinity.jpg"
@@ -129,7 +129,7 @@ const Hero = () => {
               custom={4}
             >
               <a
-                href="/Tarkeshvar_Resume.pdf"
+                href="https://drive.google.com/file/d/1sMu8SPmL2D5TcFtHjwF_tdSRpxBhGoR2/view?usp=drivesdk"
                 download
                 className="w-36 sm:w-40 flex items-center justify-center gap-2 px-4 py-2.5 rounded-full font-semibold shadow transition-all duration-300
                 bg-black text-white dark:bg-white dark:text-black hover:opacity-90"
@@ -150,7 +150,6 @@ const Hero = () => {
               </button>
             </motion.div>
 
-            {/* Social Icons */}
             <motion.div
               className="flex space-x-4 pt-2 justify-center lg:justify-start"
               initial="hidden"
@@ -159,15 +158,28 @@ const Hero = () => {
               variants={fadeInUp}
               custom={5}
             >
-              {[Github, Linkedin, Mail].map((Icon, index) => (
-                <a
-                  key={index}
-                  href="#"
-                  className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200/50 dark:bg-gray-700/40 hover:bg-black/10 dark:hover:bg-white/10 text-gray-600 dark:text-gray-300"
-                >
-                  <Icon className="w-5 h-5" />
-                </a>
-              ))}
+              <a
+                href="https://github.com/Tarkeshvar"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200/50 dark:bg-gray-700/40 hover:bg-black/10 dark:hover:bg-white/10 text-gray-600 dark:text-gray-300"
+              >
+                <Github className="w-5 h-5" />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/tarkeshvar"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200/50 dark:bg-gray-700/40 hover:bg-black/10 dark:hover:bg-white/10 text-gray-600 dark:text-gray-300"
+              >
+                <Linkedin className="w-5 h-5" />
+              </a>
+              <a
+                href="mailto:tarkeshvarmani@gmail.com"
+                className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200/50 dark:bg-gray-700/40 hover:bg-black/10 dark:hover:bg-white/10 text-gray-600 dark:text-gray-300"
+              >
+                <Mail className="w-5 h-5" />
+              </a>
             </motion.div>
           </div>
         </div>

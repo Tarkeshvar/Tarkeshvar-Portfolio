@@ -7,46 +7,46 @@ const Contact = () => {
     {
       icon: <Mail className="w-5 h-5" />,
       label: "Email",
-      value: "aryan.dev@example.com",
-      href: "mailto:aryan.dev@example.com",
+      value: "tarkeshvarmani@gmail.com",
+      href: "mailto:tarkeshvarmani@gmail.com",
     },
     {
       icon: <Phone className="w-5 h-5" />,
       label: "Phone",
-      value: "+1 (555) 123-4567",
-      href: "tel:+15551234567",
+      value: "+91 7880626736",
+      href: "tel:7880626736",
     },
     {
       icon: <Github className="w-5 h-5" />,
       label: "GitHub",
-      value: "github.com/aryandev",
-      href: "#",
+      value: "Tarkeshvar",
+      href: "https://github.com/Tarkeshvar",
     },
     {
       icon: <Linkedin className="w-5 h-5" />,
       label: "LinkedIn",
-      value: "linkedin.com/in/aryandev",
-      href: "#",
+      value: "Tarkeshvar",
+      href: "https://www.linkedin.com/in/tarkeshvar",
     },
   ];
 
   return (
     <section
       id="contact"
-      className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-gray-100 to-white dark:from-[#0c0c0c] dark:via-[#1b181e] dark:to-[#0a0a0a] transition-colors duration-300"
+      className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#fefefe] via-[#f9f9f7] to-[#f2f2f2] dark:bg-gradient-to-br dark:from-[#0a0a0a] dark:via-[#1b181e] dark:to-[#0c0c0c] transition-colors duration-300"
     >
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <motion.div
           className="text-center mb-12"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
         >
-          <h2 className="text-4xl font-bold text-black dark:text-white mb-4">
+          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Let’s{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-black to-purple-500 dark:from-white dark:to-purple-400 bg-clip-text text-transparent">
               Connect
             </span>
           </h2>
@@ -55,26 +55,32 @@ const Contact = () => {
           </p>
         </motion.div>
 
-        {/* Contact Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {/* Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           {contactItems.map((item, index) => (
             <motion.a
               key={index}
               href={item.href}
-              className="group flex items-start gap-4 p-6 rounded-2xl bg-white/5 dark:bg-gray-800/30 backdrop-blur-sm border border-gray-200/20 dark:border-gray-700/50 hover:bg-white/10 dark:hover:bg-gray-800/50 transition-all duration-300 shadow-xl"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              target="_blank"
+              className="group bg-white dark:bg-white/5 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-md transition duration-300 hover:shadow-lg flex items-start gap-4"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
+              whileHover={{ y: -5 }}
+              transition={{
+                duration: 0.5,
+                delay: index * 0.1,
+                ease: "easeOut",
+              }}
             >
-              <div className="bg-gray-100 dark:bg-gray-700 p-2 rounded-lg text-blue-600 dark:text-blue-400">
+              <div className="bg-gray-200 dark:bg-gray-700 p-2 rounded-lg text-blue-600 dark:text-blue-400">
                 {item.icon}
               </div>
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   {item.label}
                 </p>
-                <p className="font-semibold text-black dark:text-white break-words group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                <p className="font-semibold text-gray-600 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors break-words">
                   {item.value}
                 </p>
               </div>

@@ -9,7 +9,7 @@ const Skills = () => {
       lightBg: "bg-[#dbeafe]",
       darkBg: "dark:bg-blue-900/20",
       border: "border-blue-200 dark:border-blue-800/50",
-      technologies: ["JavaScript", "TypeScript", "Java", "C", "HTML", "CSS"],
+      technologies: ["JavaScript", "Java", "C", "C++", "HTML", "CSS"],
     },
     {
       title: "Frontend",
@@ -19,13 +19,10 @@ const Skills = () => {
       border: "border-purple-200 dark:border-purple-800/50",
       technologies: [
         "React",
-        "Next.js",
-        "Recoil",
-        "Context API",
-        "ShadCN",
+        "Bootstrap",
+
         "Tailwind CSS",
         "Framer Motion",
-        "Redux",
         "Material UI",
       ],
     },
@@ -39,10 +36,9 @@ const Skills = () => {
         "Node.js",
         "Express",
         "MongoDB",
-        "PostgreSQL",
-        "Supabase",
+
         "ClerkAuth",
-        "GAPIS",
+
         "Firebase",
         "REST API",
       ],
@@ -53,7 +49,7 @@ const Skills = () => {
       lightBg: "bg-[#ffedd5]",
       darkBg: "dark:bg-orange-800/20",
       border: "border-orange-200 dark:border-orange-800/50",
-      technologies: ["Git", "GitHub", "VS Code", "Figma", "Docker", "AWS"],
+      technologies: ["Git", "GitHub", "VS Code"],
     },
   ];
 
@@ -76,7 +72,7 @@ const Skills = () => {
   };
 
   return (
-    <div className="py-20 px-4 sm:px-6 lg:px-8 transition-colors duration-300 bg-gradient-to-br from-[#fefefe] via-[#f9f9f7] to-[#f2f2f2] dark:bg-gradient-to-br dark:from-[#0a0a0a] dark:via-[#1b181e] dark:to-[#0c0c0c]">
+    <div className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#fefefe] via-[#f9f9f7] to-[#f2f2f2] dark:bg-gradient-to-br dark:from-[#0a0a0a] dark:via-[#1b181e] dark:to-[#0c0c0c] transition-colors duration-300]">
       <div className="max-w-7xl mx-auto">
         <motion.div
           className="text-center mb-16"
