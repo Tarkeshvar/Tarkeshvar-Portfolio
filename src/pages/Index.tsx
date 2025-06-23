@@ -1,14 +1,13 @@
-
-import React from 'react';
-import Navigation from '../components/Navigation';
-import Hero from '../components/Hero';
-import About from '../components/About';
-import Skills from '../components/Skills';
-import Education from '../components/Education';
-import Projects from '../components/Projects';
-import Achievements from '../components/Achievements';
-import Contact from '../components/Contact';
-import Footer from '../components/Footer';
+import React from "react";
+import Navigation from "../components/Navigation";
+import Hero from "../components/Hero";
+import About from "../components/About";
+import Skills from "../components/Skills";
+import Education from "../components/Education";
+import Projects from "../components/Projects";
+import Achievements from "../components/Achievements";
+import Contact from "../components/Contact";
+import Footer from "../components/Footer";
 
 const Index = () => {
   return (
@@ -30,9 +29,9 @@ const Index = () => {
         <section id="projects">
           <Projects />
         </section>
-        <section id="achievements">
+        {/* <section id="achievements">
           <Achievements />
-        </section>
+        </section> */}
         <section id="contact">
           <Contact />
         </section>
