@@ -39,6 +39,15 @@ const Projects = () => {
       liveUrl: "https://mmmut-scholarship.vercel.app/",
       githubUrl: "#",
     },
+    {
+      title: "Academic Grading Tool",
+      description:
+        "A smart grading calculator supporting absolute and relative grading systems, designed to help students easily evaluate SGPA and CGPA with a user-friendly interface.",
+      technologies: ["React", "Framer Motion", "Tailwind CSS"],
+      image: "/Project4.jpg",
+      liveUrl: "https://cgpa-azure.vercel.app/",
+      githubUrl: "#",
+    },
   ];
 
   return (
