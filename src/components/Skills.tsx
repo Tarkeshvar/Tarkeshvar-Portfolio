@@ -9,7 +9,7 @@ const Skills = () => {
       lightBg: "bg-[#dbeafe]",
       darkBg: "dark:bg-blue-900/20",
       border: "border-blue-200 dark:border-blue-800/50",
-      technologies: ["JavaScript", "Java", "C", "C++", "HTML", "CSS"],
+      technologies: ["C", "C++", "JavaScript", "Python"],
     },
     {
       title: "Frontend",
