@@ -48,6 +48,21 @@ const Projects = () => {
       liveUrl: "https://cgpa-azure.vercel.app/",
       githubUrl: "#",
     },
+    {
+      title: "NutriAI – AI-Powered Meal Planner",
+      description:
+        "A cross-platform mobile app built with React Native and Expo that helps users generate smart meal plans, track daily calories, and access AI-generated recipes with real-time updates using Convex and Firebase Authentication.",
+      technologies: [
+        "React Native",
+        "Expo",
+        "Firebase Auth",
+        "Convex",
+        "JavaScript",
+      ],
+      image: "/Project5.jpg",
+      liveUrl: "#",
+      githubUrl: "#",
+    },
   ];
 
   return (
