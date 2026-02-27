@@ -1,38 +1,85 @@
-import React, { useState, useEffect } from "react";
-import { Menu, X, Sun, Moon, Download } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Menu, X, Sun, Moon } from "lucide-react";
+import { motion, AnimatePresence, Variants } from "framer-motion";
+
+const NAV_ITEMS = [
+  { href: "#home", label: "Home" },
+  { href: "#about", label: "About" },
+  { href: "#skills", label: "Skills" },
+  { href: "#education", label: "Education" },
+  { href: "#projects", label: "Projects" },
+  { href: "#achievements", label: "Achievements" },
+  { href: "#contact", label: "Contact" },
+];
+
+/* matches Hero's role gradients */
+const ACCENT = "linear-gradient(135deg,#a855f7,#ec4899)";
+
+const mobileMenuVariants: Variants = {
+  hidden: { opacity: 0, y: -8, scale: 0.97 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.22, ease: "easeOut" },
+  },
+  exit: {
+    opacity: 0,
+    y: -8,
+    scale: 0.97,
+    transition: { duration: 0.18, ease: "easeIn" },
+  },
+};
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isDark, setIsDark] = useState(true);
+  const [active, setActive] = useState("#home");
+  const menuRef = useRef<HTMLDivElement>(null);
 
+  /* scroll detection */
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const fn = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", fn);
+    return () => window.removeEventListener("scroll", fn);
   }, []);
 
+  /* active section tracker */
   useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(`#${e.target.id}`);
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px" },
+    );
+    NAV_ITEMS.forEach(({ href }) => {
+      const el = document.querySelector(href);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  /* dark mode */
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", isDark);
   }, [isDark]);
 
-  const navItems = [
-    { href: "#home", label: "Home" },
-    { href: "#about", label: "About" },
-    { href: "#skills", label: "Skills" },
-    { href: "#education", label: "Education" },
-    { href: "#projects", label: "Projects" },
-    { href: "#achievements", label: "Achievements" },
-    { href: "#contact", label: "Contact" },
-  ];
+  /* close on outside click */
+  useEffect(() => {
+    const fn = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", fn);
+    return () => document.removeEventListener("mousedown", fn);
+  }, []);
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) element.scrollIntoView({ behavior: "smooth" });
+  const scrollTo = (href: string) => {
+    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
     setIsOpen(false);
   };
 
@@ -40,70 +87,179 @@ const Navigation = () => {
     <nav
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-white dark:bg-[#1b181e]/80 backdrop-blur-xl shadow-lg border-b border-gray-300 dark:border-gray-700"
-          : "bg-white/50 dark:bg-transparent"
+          ? "bg-white/80 dark:bg-[#070709]/80 backdrop-blur-xl shadow-sm border-b border-gray-200/60 dark:border-white/[0.06]"
+          : "bg-transparent"
       }`}
+      style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between py-3">
-          <div className="flex-shrink-0">
-            <span className="text-2xl font-semibold text-gray-900 dark:text-white tracking-tight">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 lg:px-12">
+        <div className="flex items-center justify-between h-14 sm:h-16">
+          {/* ── Logo ── */}
+          <button
+            onClick={() => scrollTo("#home")}
+            className="flex-shrink-0 flex items-center gap-1.5 group"
+          >
+            <span
+              className="text-lg sm:text-xl font-extrabold tracking-tight text-gray-900 dark:text-white"
+              style={{ fontFamily: "'Syne', sans-serif" }}
+            >
               Tarkeshvar
             </span>
+            <motion.span
+              className="w-1.5 h-1.5 rounded-full"
+              style={{ backgroundImage: ACCENT }}
+              animate={{ scale: [1, 1.5, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+          </button>
+
+          {/* ── Desktop nav ── */}
+          <div className="hidden md:flex items-center gap-1">
+            {NAV_ITEMS.map((item) => {
+              const isActive = active === item.href;
+              return (
+                <button
+                  key={item.label}
+                  onClick={() => scrollTo(item.href)}
+                  className="relative px-3 py-1.5 text-sm font-medium transition-colors duration-200
+                    text-gray-500 dark:text-gray-400
+                    hover:text-gray-900 dark:hover:text-white"
+                >
+                  {item.label}
+                  {/* active underline */}
+                  <motion.span
+                    className="absolute bottom-0 left-3 right-3 h-[2px] rounded-full"
+                    style={{ backgroundImage: ACCENT }}
+                    initial={false}
+                    animate={{
+                      scaleX: isActive ? 1 : 0,
+                      opacity: isActive ? 1 : 0,
+                    }}
+                    transition={{ duration: 0.25, ease: "easeOut" }}
+                  />
+                </button>
+              );
+            })}
           </div>
 
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <button
-                key={item.label}
-                onClick={() => scrollToSection(item.href)}
-                className="text-black dark:text-gray-300 hover:text-blue-500 px-3 py-2 text-sm font-medium transition-colors relative group"
-              >
-                {item.label}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 transition-all duration-300 group-hover:w-full"></span>
-              </button>
-            ))}
-
+          {/* ── Right controls ── */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Theme toggle */}
             <button
               onClick={() => setIsDark(!isDark)}
-              className="text-black dark:text-gray-300 hover:text-blue-500 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center
+                bg-gray-100 dark:bg-white/5
+                border border-gray-200 dark:border-white/10
+                text-gray-500 dark:text-gray-400
+                hover:scale-110 active:scale-95
+                transition-all duration-200"
+              aria-label="Toggle theme"
             >
-              {isDark ? <Sun size={20} /> : <Moon size={20} />}
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={isDark ? "sun" : "moon"}
+                  initial={{ rotate: -30, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 30, opacity: 0 }}
+                  transition={{ duration: 0.18 }}
+                  className="flex items-center justify-center"
+                >
+                  {isDark ? <Sun size={15} /> : <Moon size={15} />}
+                </motion.span>
+              </AnimatePresence>
             </button>
-          </div>
 
-          <div className="md:hidden flex items-center space-x-2">
+            {/* Hamburger — mobile only */}
             <button
-              onClick={() => setIsDark(!isDark)}
-              className="text-black dark:text-gray-300 p-2"
+              onClick={() => setIsOpen((p) => !p)}
+              className="md:hidden w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center
+                bg-gray-100 dark:bg-white/5
+                border border-gray-200 dark:border-white/10
+                text-gray-500 dark:text-gray-400
+                hover:scale-110 active:scale-95
+                transition-all duration-200"
+              aria-label="Toggle menu"
             >
-              {isDark ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="text-black dark:text-gray-300 p-2"
-            >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={isOpen ? "x" : "menu"}
+                  initial={{ rotate: -20, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 20, opacity: 0 }}
+                  transition={{ duration: 0.16 }}
+                  className="flex items-center justify-center"
+                >
+                  {isOpen ? <X size={16} /> : <Menu size={16} />}
+                </motion.span>
+              </AnimatePresence>
             </button>
           </div>
         </div>
-
-        {isOpen && (
-          <div className="md:hidden">
-            <div className="px-4 py-3 mt-2 space-y-2 bg-white dark:bg-[#1b181e]/95 backdrop-blur-xl border border-gray-300 dark:border-gray-700 rounded-xl shadow-xl">
-              {navItems.map((item) => (
-                <button
-                  key={item.label}
-                  onClick={() => scrollToSection(item.href)}
-                  className="block w-full text-left text-black dark:text-gray-300 hover:text-blue-500 text-base font-medium transition-colors px-3 py-2"
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
+
+      {/* ── Mobile dropdown ── */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            ref={menuRef}
+            variants={mobileMenuVariants}
+            initial="hidden"
+            animate="show"
+            exit="exit"
+            className="md:hidden mx-4 sm:mx-6 mb-3 mt-1 overflow-hidden
+              rounded-2xl
+              bg-white/95 dark:bg-[#0e0e10]/95
+              backdrop-blur-xl
+              border border-gray-200/60 dark:border-white/[0.07]
+              shadow-xl shadow-black/5 dark:shadow-black/30"
+          >
+            <div className="px-3 py-3 space-y-0.5">
+              {NAV_ITEMS.map((item, i) => {
+                const isActive = active === item.href;
+                return (
+                  <motion.button
+                    key={item.label}
+                    initial={{ opacity: 0, x: -12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      delay: i * 0.04,
+                      duration: 0.2,
+                      ease: "easeOut",
+                    }}
+                    onClick={() => scrollTo(item.href)}
+                    className="flex items-center justify-between w-full
+                      px-3 py-2.5 rounded-xl text-sm font-medium
+                      transition-all duration-150 text-left"
+                    style={
+                      isActive
+                        ? {
+                            backgroundImage:
+                              "linear-gradient(135deg,rgba(168,85,247,0.12),rgba(236,72,153,0.08))",
+                            color: "#a855f7",
+                          }
+                        : {}
+                    }
+                  >
+                    <span
+                      className={
+                        isActive ? "" : "text-gray-600 dark:text-gray-300"
+                      }
+                    >
+                      {item.label}
+                    </span>
+                    {isActive && (
+                      <span
+                        className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                        style={{ backgroundImage: ACCENT }}
+                      />
+                    )}
+                  </motion.button>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };

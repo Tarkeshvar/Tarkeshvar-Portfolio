@@ -1,202 +1,513 @@
 import React, { useEffect, useState } from "react";
-import { ChevronDown, Github, Linkedin, Mail, Download } from "lucide-react";
-import { motion } from "framer-motion";
+import {
+  ChevronDown,
+  Github,
+  Linkedin,
+  Mail,
+  Download,
+  Sparkles,
+  ArrowUpRight,
+} from "lucide-react";
+import { motion, useMotionValue, useSpring, Variants } from "framer-motion";
 
-const Hero = () => {
-  const [text, setText] = useState("");
-  const [showCursor, setShowCursor] = useState(true);
-  const fullText = "Full Stack Developer";
+/* ── Load Google Fonts once ── */
+const FontLoader = () => {
+  useEffect(() => {
+    if (document.getElementById("hero-fonts")) return;
+    const link = document.createElement("link");
+    link.id = "hero-fonts";
+    link.rel = "stylesheet";
+    link.href =
+      "https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap";
+    document.head.appendChild(link);
+  }, []);
+  return null;
+};
+
+const ROLES = [
+  {
+    label: "Full Stack Developer",
+    gradient: "linear-gradient(135deg,#a855f7,#ec4899)",
+    glow: "rgba(168,85,247,0.20)",
+    tw: "from-purple-500 to-pink-500",
+  },
+  {
+    label: "App Developer",
+    gradient: "linear-gradient(135deg,#38bdf8,#6366f1)",
+    glow: "rgba(56,189,248,0.20)",
+    tw: "from-sky-400 to-indigo-500",
+  },
+  {
+    label: "AI / ML Engineer",
+    gradient: "linear-gradient(135deg,#34d399,#06b6d4)",
+    glow: "rgba(52,211,153,0.20)",
+    tw: "from-emerald-400 to-cyan-500",
+  },
+];
+
+export default function Hero() {
+  const [ri, setRi] = useState(0);
+  const [typed, setTyped] = useState("");
+  const [del, setDel] = useState(false);
+  const [blink, setBlink] = useState(true);
 
   useEffect(() => {
-    let index = 0;
-    const timer = setInterval(() => {
-      if (index < fullText.length) {
-        setText(fullText.slice(0, index + 1));
-        index++;
-      } else {
-        clearInterval(timer);
-      }
-    }, 100);
-    return () => clearInterval(timer);
+    const t = setInterval(() => setBlink((p) => !p), 520);
+    return () => clearInterval(t);
   }, []);
 
   useEffect(() => {
-    const cursorTimer = setInterval(() => {
-      setShowCursor((prev) => !prev);
-    }, 500);
-    return () => clearInterval(cursorTimer);
-  }, []);
-
-  const scrollToAbout = () => {
-    const aboutSection = document.querySelector("#about");
-    if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: "smooth" });
+    const full = ROLES[ri].label;
+    let id;
+    if (!del && typed === full) {
+      id = setTimeout(() => setDel(true), 2000);
+    } else if (del && typed === "") {
+      setDel(false);
+      setRi((p) => (p + 1) % ROLES.length);
+    } else {
+      id = setTimeout(
+        () =>
+          setTyped(
+            del
+              ? full.slice(0, typed.length - 1)
+              : full.slice(0, typed.length + 1),
+          ),
+        del ? 45 : 85,
+      );
     }
-  };
+    return () => clearTimeout(id);
+  }, [typed, del, ri]);
 
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 30 },
-    visible: (i = 0) => ({
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const sx = useSpring(mx, { stiffness: 40, damping: 18 });
+  const sy = useSpring(my, { stiffness: 40, damping: 18 });
+  useEffect(() => {
+    const fn = (e) => {
+      mx.set(((e.clientX - window.innerWidth / 2) / window.innerWidth) * 28);
+      my.set(((e.clientY - window.innerHeight / 2) / window.innerHeight) * 28);
+    };
+    window.addEventListener("mousemove", fn);
+    return () => window.removeEventListener("mousemove", fn);
+  }, []);
+
+  const role = ROLES[ri];
+
+  const up: Variants = {
+    hidden: { opacity: 0, y: 28 },
+    show: (i: number = 0) => ({
       opacity: 1,
       y: 0,
-      transition: { delay: i * 0.2, duration: 0.6 },
+      transition: {
+        delay: i * 0.12,
+        duration: 0.6,
+        ease: "easeOut",
+      },
     }),
   };
 
+  const switchRole = (i) => {
+    setRi(i);
+    setTyped("");
+    setDel(false);
+  };
+
   return (
-    <div className="pt-2 sm:pt-8 min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-[#fefefe] via-[#f9f9f7] to-[#f2f2f2] dark:bg-gradient-to-br dark:from-[#0a0a0a] dark:via-[#1b181e] dark:to-[#0c0c0c] transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center lg:justify-center text-center lg:text-left">
-          {/* Image */}
+    <>
+      <FontLoader />
+      <section
+        className="relative min-h-screen w-full flex items-center justify-center overflow-hidden
+          bg-[#f7f7f5] dark:bg-[#070709] transition-colors duration-500"
+        style={{ fontFamily: "'DM Sans', sans-serif" }}
+      >
+        {/* ── Background ── */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div
+            className="absolute inset-0 opacity-[0.04] dark:opacity-[0.07]"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle, #94a3b8 1px, transparent 1px)",
+              backgroundSize: "28px 28px",
+            }}
+          />
           <motion.div
-            className="order-1 lg:order-2 flex justify-center lg:justify-center mt-0"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            custom={0}
-          >
-            <div className="relative">
-              <div className="p-0.5 rounded-full bg-gradient-to-r from-gray-400 to-purple-200 dark:from-purple-200 dark:to-purple-300">
-                <div className="w-40 h-40 sm:w-52 sm:h-52 lg:w-80 lg:h-80 rounded-full overflow-hidden bg-white dark:bg-[#1b181e] shadow-xl">
+            style={{ x: sx, y: sy, background: role.glow }}
+            className="absolute -top-32 -right-32 w-[480px] h-[480px] rounded-full blur-[110px] transition-[background] duration-700"
+          />
+          <motion.div
+            style={{ x: sx, y: sy, background: "rgba(99,102,241,0.09)" }}
+            className="absolute -bottom-20 -left-20 w-[360px] h-[360px] rounded-full blur-[90px]"
+          />
+        </div>
+
+        {/* ── Layout ── */}
+        <div
+          className="relative z-10 w-full max-w-6xl mx-auto
+          px-5 sm:px-8 lg:px-12
+          py-24 sm:py-28 lg:py-0
+          min-h-screen flex items-center"
+        >
+          <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+            {/* ════ TEXT ════ */}
+            <div className="order-2 lg:order-1 flex flex-col items-center lg:items-start text-center lg:text-left gap-4 sm:gap-5">
+              {/* Status */}
+              <motion.div
+                variants={up}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                custom={0}
+                className="inline-flex items-center gap-2
+                  px-3 py-1.5 rounded-full
+                  text-[11px] font-medium tracking-wide
+                  bg-white dark:bg-white/5
+                  border border-gray-200/80 dark:border-white/10
+                  text-gray-500 dark:text-gray-400 shadow-sm"
+                style={{ fontFamily: "'JetBrains Mono', monospace" }}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Available for opportunities
+              </motion.div>
+
+              {/* Eyebrow */}
+              <motion.p
+                variants={up}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                custom={1}
+                className="text-xs sm:text-sm text-gray-400 dark:text-gray-500
+                  tracking-[0.18em] uppercase font-light"
+              >
+                Hello, I'm
+              </motion.p>
+
+              {/* Name */}
+              <motion.h1
+                variants={up}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                custom={2}
+                className="text-[2.8rem] leading-[1.0] sm:text-[3.8rem] lg:text-[4.8rem] xl:text-[5.6rem]
+                  font-extrabold tracking-[-0.03em]
+                  text-gray-900 dark:text-white"
+                style={{ fontFamily: "'Syne', sans-serif" }}
+              >
+                Tarkeshvar
+                <motion.span
+                  className="inline-block w-2 h-2 sm:w-2.5 sm:h-2.5 lg:w-3 lg:h-3 rounded-full ml-1 align-bottom mb-1.5"
+                  style={{ backgroundImage: role.gradient }}
+                  animate={{ scale: [1, 1.5, 1] }}
+                  transition={{ duration: 1.8, repeat: Infinity }}
+                />
+              </motion.h1>
+
+              {/* Typewriter */}
+              <motion.div
+                variants={up}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                custom={3}
+                className="flex items-center gap-0.5"
+                style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  minHeight: "2.2rem",
+                }}
+              >
+                <span
+                  className="text-lg sm:text-2xl lg:text-3xl font-medium bg-clip-text text-transparent"
+                  style={{ backgroundImage: role.gradient }}
+                >
+                  {typed}
+                </span>
+                <span
+                  className="text-lg sm:text-2xl lg:text-3xl font-light transition-opacity duration-100"
+                  style={{
+                    opacity: blink ? 1 : 0,
+                    backgroundImage: role.gradient,
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  |
+                </span>
+              </motion.div>
+
+              {/* Description */}
+              <motion.p
+                variants={up}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                custom={4}
+                className="text-sm sm:text-base lg:text-[1.05rem] font-light leading-relaxed
+                  text-gray-500 dark:text-gray-400
+                  max-w-[300px] sm:max-w-md lg:max-w-lg"
+              >
+                I build{" "}
+                <span className="font-medium text-gray-800 dark:text-gray-100">
+                  full-stack web apps
+                </span>
+                , ship{" "}
+                <span className="font-medium text-gray-800 dark:text-gray-100">
+                  cross-platform mobile experiences
+                </span>
+                , and craft{" "}
+                <span className="font-medium text-gray-800 dark:text-gray-100">
+                  AI / ML solutions
+                </span>{" "}
+                Blending clean code with thoughtful design.
+              </motion.p>
+
+              {/* CTAs */}
+              <motion.div
+                variants={up}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                custom={6}
+                className="flex flex-wrap justify-center lg:justify-start gap-3 pt-1"
+              >
+                <a
+                  href="https://drive.google.com/file/d/1w9Ft_ZKILLjjZ4yRI2mnhbe6PtKwENip/view?usp=drivesdk"
+                  download
+                  className="group flex items-center gap-2
+                    px-5 sm:px-6 py-2.5 sm:py-3 rounded-full
+                    text-xs sm:text-sm font-semibold text-white
+                    hover:scale-[1.04] active:scale-[0.97] transition-transform duration-200 shadow-lg"
+                  style={{
+                    backgroundImage: role.gradient,
+                    boxShadow: `0 6px 22px ${role.glow}`,
+                  }}
+                >
+                  <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:-translate-y-0.5 transition-transform" />
+                  Resume
+                  <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 opacity-70" />
+                </a>
+                <button
+                  onClick={() =>
+                    document
+                      .querySelector("#contact")
+                      ?.scrollIntoView({ behavior: "smooth" })
+                  }
+                  className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full
+                    text-xs sm:text-sm font-semibold
+                    border border-gray-200 dark:border-white/10
+                    text-gray-700 dark:text-gray-300
+                    hover:bg-gray-100 dark:hover:bg-white/5
+                    hover:scale-[1.04] active:scale-[0.97] transition-all duration-200"
+                >
+                  Contact Me
+                </button>
+              </motion.div>
+
+              {/* Socials */}
+              <motion.div
+                variants={up}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                custom={7}
+                className="flex gap-2.5 sm:gap-3 pt-1 justify-center lg:justify-start"
+              >
+                {[
+                  {
+                    href: "https://github.com/Tarkeshvar",
+                    Icon: Github,
+                    label: "GitHub",
+                  },
+                  {
+                    href: "https://www.linkedin.com/in/tarkeshvar",
+                    Icon: Linkedin,
+                    label: "LinkedIn",
+                  },
+                  {
+                    href: "mailto:tarkeshvarmani@gmail.com",
+                    Icon: Mail,
+                    label: "Email",
+                  },
+                ].map(({ href, Icon, label }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target={href.startsWith("http") ? "_blank" : undefined}
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center
+                      bg-white dark:bg-white/5
+                      border border-gray-200 dark:border-white/10
+                      text-gray-500 dark:text-gray-400
+                      hover:scale-110 active:scale-95
+                      transition-all duration-200"
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundImage = role.gradient;
+                      e.currentTarget.style.color = "#fff";
+                      e.currentTarget.style.borderColor = "transparent";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundImage = "";
+                      e.currentTarget.style.color = "";
+                      e.currentTarget.style.borderColor = "";
+                    }}
+                  >
+                    <Icon className="w-4 h-4" />
+                  </a>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* ════ PHOTO ════ */}
+            <motion.div
+              variants={up}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true }}
+              custom={1}
+              className="order-1 lg:order-2 flex justify-center lg:justify-end"
+            >
+              <div className="relative flex-shrink-0">
+                {/* Outer spinning ring */}
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 22,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  className="absolute rounded-full border border-dashed"
+                  style={{
+                    inset: "-14px",
+                    borderColor: "rgba(168,85,247,0.25)",
+                  }}
+                />
+                {/* Inner counter ring */}
+                <motion.div
+                  animate={{ rotate: -360 }}
+                  transition={{
+                    duration: 34,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  className="absolute rounded-full border border-dotted"
+                  style={{
+                    inset: "-26px",
+                    borderColor: "rgba(56,189,248,0.18)",
+                  }}
+                />
+
+                {/* Gradient border ring */}
+                <div
+                  className="absolute rounded-full transition-all duration-700"
+                  style={{
+                    inset: "-3px",
+                    backgroundImage: role.gradient,
+                    borderRadius: "9999px",
+                    padding: "3px",
+                  }}
+                />
+
+                {/* Photo */}
+                {/*
+                  Size ladder:
+                  mobile  < 640px  → 160×160
+                  sm      ≥ 640px  → 208×208
+                  lg      ≥ 1024px → 288×288
+                  xl      ≥ 1280px → 320×320
+                */}
+                <div
+                  className="relative z-10 rounded-full overflow-hidden
+                    w-40 h-40 sm:w-52 sm:h-52 lg:w-72 lg:h-72 xl:w-80 xl:h-80
+                    bg-white dark:bg-[#111]
+                    ring-[3px] ring-[#f7f7f5] dark:ring-[#070709]
+                    shadow-2xl"
+                >
                   <img
                     src="/Infinity.jpg"
                     alt="Tarkeshvar"
-                    className="w-full h-full object-cover rounded-full"
+                    className="w-full h-full object-cover"
                   />
                 </div>
+
+                {/* Stat cards — only on large screens */}
+                <motion.div
+                  animate={{ y: [0, 6, 0] }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 0.4,
+                  }}
+                  className="hidden lg:flex absolute -left-12 top-[30%]
+                    flex-col items-center
+                    bg-white dark:bg-[#161618]
+                    border border-gray-100 dark:border-white/10
+                    shadow-xl rounded-2xl px-3 py-2 min-w-[72px]"
+                >
+                  <span
+                    className="text-base font-bold text-gray-900 dark:text-white"
+                    style={{ fontFamily: "'Syne', sans-serif" }}
+                  >
+                    3rd
+                  </span>
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 leading-tight mt-0.5">
+                    Yr Student
+                  </span>
+                </motion.div>
+
+                <motion.div
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{
+                    duration: 3.6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1.1,
+                  }}
+                  className="hidden lg:flex absolute -left-12 top-[54%]
+                    flex-col items-center
+                    bg-white dark:bg-[#161618]
+                    border border-gray-100 dark:border-white/10
+                    shadow-xl rounded-2xl px-3 py-2 min-w-[72px]"
+                >
+                  <span
+                    className="text-base font-bold text-gray-900 dark:text-white"
+                    style={{ fontFamily: "'Syne', sans-serif" }}
+                  >
+                    10+
+                  </span>
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 leading-tight mt-0.5">
+                    projects
+                  </span>
+                </motion.div>
               </div>
-            </div>
-          </motion.div>
-
-          {/* Content */}
-          <div className="order-2 lg:order-1 flex flex-col justify-center items-center lg:items-start text-center lg:text-left space-y-6 mt-0">
-            {/* Heading */}
-            <motion.h1
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl font-bold text-gray-900 dark:text-white leading-tight whitespace-nowrap"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInUp}
-              custom={1}
-            >
-              Hello, I’m{" "}
-              <span className="bg-gradient-to-r from-black to-purple-500 dark:from-white dark:to-purple-400 bg-clip-text text-transparent">
-                Tarkeshvar
-              </span>
-            </motion.h1>
-
-            {/* Subheading Typing */}
-            <motion.div
-              className="text-xl sm:text-2xl md:text-3xl text-gray-700 dark:text-gray-300 h-10"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInUp}
-              custom={2}
-            >
-              {text}
-              <span
-                className={`${
-                  showCursor ? "opacity-100" : "opacity-0"
-                } transition-opacity text-blue-600 dark:text-blue-400`}
-              >
-                |
-              </span>
-            </motion.div>
-
-            {/* Description */}
-            <motion.p
-              className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-xl leading-relaxed"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInUp}
-              custom={3}
-            >
-              A passionate full-stack developer interested in AI, data science,
-              and crafting user-focused web applications. Quick learner. Curious
-              soul. Always building.
-            </motion.p>
-
-            {/* Buttons */}
-            <motion.div
-              className="flex justify-center items-center gap-4"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInUp}
-              custom={4}
-            >
-              <a
-                href="https://drive.google.com/file/d/1sMu8SPmL2D5TcFtHjwF_tdSRpxBhGoR2/view?usp=drivesdk"
-                download
-                className="w-36 sm:w-40 flex items-center justify-center gap-2 px-4 py-2.5 rounded-full font-semibold shadow transition-all duration-300
-                bg-black text-white dark:bg-white dark:text-black hover:opacity-90"
-              >
-                <Download className="w-5 h-5" />
-                Resume
-              </a>
-
-              <button
-                onClick={() =>
-                  document
-                    .querySelector("#contact")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-                className="w-36 sm:w-40 text-center px-4 py-2.5 rounded-full font-semibold border text-black dark:text-white border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300"
-              >
-                Contact Me
-              </button>
-            </motion.div>
-
-            <motion.div
-              className="flex space-x-4 pt-2 justify-center lg:justify-start"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInUp}
-              custom={5}
-            >
-              <a
-                href="https://github.com/Tarkeshvar"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200/50 dark:bg-gray-700/40 hover:bg-black/10 dark:hover:bg-white/10 text-gray-600 dark:text-gray-300"
-              >
-                <Github className="w-5 h-5" />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/tarkeshvar"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200/50 dark:bg-gray-700/40 hover:bg-black/10 dark:hover:bg-white/10 text-gray-600 dark:text-gray-300"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a
-                href="mailto:tarkeshvarmani@gmail.com"
-                className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200/50 dark:bg-gray-700/40 hover:bg-black/10 dark:hover:bg-white/10 text-gray-600 dark:text-gray-300"
-              >
-                <Mail className="w-5 h-5" />
-              </a>
             </motion.div>
           </div>
         </div>
 
-        {/* Scroll Icon */}
+        {/* Scroll cue */}
         <motion.button
-          onClick={scrollToAbout}
-          className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-gray-400 dark:text-gray-500 hover:text-black dark:hover:text-white transition-colors"
-          animate={{ y: [0, -10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          whileHover={{ scale: 1.1 }}
+          onClick={() =>
+            document
+              .querySelector("#about")
+              ?.scrollIntoView({ behavior: "smooth" })
+          }
+          animate={{ y: [0, 7, 0] }}
+          transition={{ duration: 2.2, repeat: Infinity }}
+          className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2
+            flex flex-col items-center gap-1
+            text-gray-300 dark:text-gray-600
+            hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
         >
-          <ChevronDown className="w-6 h-6" />
+          <span
+            className="text-[9px] sm:text-[10px] tracking-[0.22em] uppercase font-medium"
+            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          >
+            scroll
+          </span>
+          <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         </motion.button>
-      </div>
-    </div>
+      </section>
+    </>
   );
-};
-
-export default Hero;
+}
