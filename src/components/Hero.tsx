@@ -236,30 +236,45 @@ export default function Hero() {
               </motion.div>
 
               {/* Description */}
-              <motion.p
+              <motion.div
                 variants={up}
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true }}
                 custom={4}
-                className="text-sm sm:text-base lg:text-[1.05rem] font-light leading-relaxed
-                  text-gray-500 dark:text-gray-400
-                  max-w-[300px] sm:max-w-md lg:max-w-lg"
+                className="flex flex-col gap-2 max-w-[300px] sm:max-w-md lg:max-w-lg"
               >
-                I build{" "}
-                <span className="font-medium text-gray-800 dark:text-gray-100">
-                  full-stack web apps
-                </span>
-                , ship{" "}
-                <span className="font-medium text-gray-800 dark:text-gray-100">
-                  cross-platform mobile experiences
-                </span>
-                , and craft{" "}
-                <span className="font-medium text-gray-800 dark:text-gray-100">
-                  AI / ML solutions
-                </span>{" "}
-                Blending clean code with thoughtful design.
-              </motion.p>
+                <p className="text-sm sm:text-base lg:text-[1.05rem] leading-[2] font-light text-gray-400 dark:text-gray-500">
+                  Building{" "}
+                  <span
+                    className="font-semibold bg-clip-text text-transparent"
+                    style={{
+                      backgroundImage: "linear-gradient(90deg,#a855f7,#ec4899)",
+                    }}
+                  >
+                    scalable web platforms,
+                  </span>{" "}
+                  crafting{" "}
+                  <span
+                    className="font-semibold bg-clip-text text-transparent"
+                    style={{
+                      backgroundImage: "linear-gradient(90deg,#38bdf8,#6366f1)",
+                    }}
+                  >
+                    mobile experiences,
+                  </span>{" "}
+                  and engineering{" "}
+                  <span
+                    className="font-semibold bg-clip-text text-transparent"
+                    style={{
+                      backgroundImage: "linear-gradient(90deg,#34d399,#06b6d4)",
+                    }}
+                  >
+                    intelligent AI solutions
+                  </span>{" "}
+                  that make a real difference.
+                </p>
+              </motion.div>
 
               {/* CTAs */}
               <motion.div
