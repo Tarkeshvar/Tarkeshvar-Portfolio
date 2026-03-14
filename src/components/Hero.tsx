@@ -439,7 +439,7 @@ export default function Hero() {
                     shadow-2xl"
                 >
                   <img
-                    src="/Infinity.jpg"
+                    src="/abc.png"
                     alt="Tarkeshvar"
                     className="w-full h-full object-cover"
                   />
